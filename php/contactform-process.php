@@ -1,59 +1,61 @@
+
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $errorMSG = "";
 
+// Validate Name
 if (empty($_POST["name"])) {
-    $errorMSG = "Name is required ";
+    $errorMSG .= "Name is required. ";
 } else {
-    $name = $_POST["name"];
+    $name = htmlspecialchars($_POST["name"]);
 }
 
+// Validate Email
 if (empty($_POST["email"])) {
-    $errorMSG = "Email is required ";
+    $errorMSG .= "Email is required. ";
+} elseif (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+    $errorMSG .= "Invalid email format. ";
 } else {
     $email = $_POST["email"];
 }
 
+// Validate Message
 if (empty($_POST["message"])) {
-    $errorMSG = "Message is required ";
+    $errorMSG .= "Message is required. ";
 } else {
-    $message = $_POST["message"];
+    $message = htmlspecialchars($_POST["message"]);
 }
 
-if (empty($_POST["terms"])) {
-    $errorMSG = "Terms is required ";
-} else {
-    $terms = $_POST["terms"];
+// Validate Terms
+if (!isset($_POST["terms"])) {
+    $errorMSG .= "You must accept the terms. ";
 }
 
-$EmailTo = "yourname@domain.com";
-$Subject = "New message from Aria landing page";
+if (empty($errorMSG)) {
+    $EmailTo = "nandhudevanand4419@gmail.com"; // Your email
+    $Subject = "New message from Bougain Kayak";
 
-// prepare email body text
-$Body = "";
-$Body .= "Name: ";
-$Body .= $name;
-$Body .= "\n";
-$Body .= "Email: ";
-$Body .= $email;
-$Body .= "\n";
-$Body .= "Message: ";
-$Body .= $message;
-$Body .= "\n";
-$Body .= "Terms: ";
-$Body .= $terms;
-$Body .= "\n";
+    // Email Body
+    $Body = "Name: $name\n";
+    $Body .= "Email: $email\n";
+    $Body .= "Message: $message\n";
 
-// send email
-$success = mail($EmailTo, $Subject, $Body, "From:".$email);
+    // Email Headers
+    $headers = "From: no-reply@gmail.com\r\n";
+    $headers .= "Reply-To: $email\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
-// redirect to success page
-if ($success && $errorMSG == ""){
-   echo "success";
-}else{
-    if($errorMSG == ""){
-        echo "Something went wrong :(";
+    // Send Mail
+    $success = mail($EmailTo, $Subject, $Body, $headers);
+
+    if ($success) {
+        echo "success";
     } else {
-        echo $errorMSG;
+        echo "Mail sending failed!";
     }
+} else {
+    echo $errorMSG;
 }
 ?>

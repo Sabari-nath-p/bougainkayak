@@ -655,9 +655,12 @@ input[type='checkbox'] {
 }
 
 .navbar-custom .navbar-brand.logo-image img {
-    width: 7.0625rem;
-	height: 2rem;
-	-webkit-backface-visibility: hidden;
+    width: 70px; /* Fixed size for circle */
+    height: 70px; /* Must match width for perfect circle */
+    -webkit-backface-visibility: hidden;
+    border-radius: 50%; /* This creates the circular shape */
+    object-fit: cover; /* Ensures the image fills the circle properly */
+    display: block; /* Removes any extra space around the image */
 }
 
 .navbar-custom .navbar-brand.logo-text {
@@ -772,7 +775,7 @@ input[type='checkbox'] {
 /*    04. Header     */
 /*********************/
 .header {
-	background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../images/header-background.jpg') center center no-repeat;
+	background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../images/home.jpg') center center no-repeat;
 	background-size: cover;
 }
 
